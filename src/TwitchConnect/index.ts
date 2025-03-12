@@ -13,7 +13,7 @@ export class Tw_Client {
 
     constructor(channels) {
         this.channels = channels;
-        console.log(this.identity, this.channels)
+        console.log(this.channels)
     }
 
     async SendMessage(message) {
