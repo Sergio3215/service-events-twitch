@@ -1,3 +1,5 @@
+import { ConfigService } from "@nestjs/config";
+
 const tmi = require('tmi.js');
 
 /**
@@ -9,18 +11,23 @@ export class Tw_Client {
     private identity;
     private channels;
 
-    constructor(identity, channels) {
-        this.identity = identity;
+    constructor(channels) {
         this.channels = channels;
         console.log(this.identity, this.channels)
     }
 
     async SendMessage(message) {
         try {
+            const configService = new ConfigService();
+            const username = configService.get<string>("username");
+            const password = configService.get<string>("password");
             const client = new tmi.Client({
-                options: { debug: true },
-                identity:this.identity,
-                channels: ["#"+this.channels]
+                // options: { debug: true },
+                identity: {
+                    username: username,
+                    password: password
+                },
+                channels: ["#" + this.channels]
             });
             await client.connect();
             await client.say(this.channels, message);

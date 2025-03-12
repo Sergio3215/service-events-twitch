@@ -6,7 +6,7 @@ import { Tw_Client } from '../TwitchConnect/index';
 export class RaidEventsService { 
 
     async sendMessage(credentials: credentials_type){
-        const tw = new Tw_Client(credentials.identity,credentials.channel);
+        const tw = new Tw_Client(credentials.channel);
         // await tw.ConnectVoid();
         tw.SendMessage(credentials.message);
         // await tw.DisconnectVoid();
