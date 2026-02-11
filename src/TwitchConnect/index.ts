@@ -77,6 +77,7 @@ export class Tw_Client {
             if (data && data.length > 0) {
                 const clip = data[0];
                 return {
+                    id: clip.id,
                     url: clip.url,
                     title: clip.title,
                     error: ""
