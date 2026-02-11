@@ -14,7 +14,7 @@ export class Tw_Client {
 
     constructor(channels) {
         this.channels = channels;
-        console.log(this.channels)
+        // console.log(this.channels)
     }
 
     async SendMessage(message) {
@@ -40,12 +40,25 @@ export class Tw_Client {
     async GetClips(credentials: credentials_type_clips) {
         try {
 
-            const { broadcaster_id } = credentials;
+            const { channel } = credentials;
 
 
             const configService = new ConfigService();
             const clientId = configService.get<string>("client_id");
             const token = configService.get<string>("token");
+
+
+            const ftchBroadcaster = await fetch(`https://api.twitch.tv/helix/users?login=${channel}`, {
+                method: 'GET',
+                headers: {
+                    'Client-ID': clientId || "",
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            const broadcasterData = await ftchBroadcaster.json();
+            const broadcaster_id = broadcasterData.data[0].id;
+            // console.log(broadcaster_id);
 
             const response = await fetch(`https://api.twitch.tv/helix/clips?broadcaster_id=${broadcaster_id}&first=1`, {
                 method: 'GET',

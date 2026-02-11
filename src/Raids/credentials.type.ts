@@ -10,6 +10,4 @@ export class credentials_type {
 export class credentials_type_clips {
     @ApiProperty()
     channel: string;
-    @ApiProperty()
-    broadcaster_id: string;
 }
