@@ -1,4 +1,5 @@
 import { ConfigService } from "@nestjs/config";
+import { credentials_type_clips } from "src/Raids/credentials.type";
 
 const tmi = require('tmi.js');
 
@@ -33,6 +34,51 @@ export class Tw_Client {
             await client.say(this.channels, message);
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    async GetClips(credentials: credentials_type_clips) {
+        try {
+
+            const { broadcaster_id } = credentials;
+
+
+            const configService = new ConfigService();
+            const clientId = configService.get<string>("client_id");
+            const token = configService.get<string>("token");
+
+            const response = await fetch(`https://api.twitch.tv/helix/clips?broadcaster_id=${broadcaster_id}&first=1`, {
+                method: 'GET',
+                headers: {
+                    'Client-ID': clientId || "",
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status} - ${response.statusText}`);
+            }
+
+            const { data } = await response.json();
+
+            if (data && data.length > 0) {
+                const clip = data[0];
+                return {
+                    url: clip.url,
+                    title: clip.title,
+                    error: ""
+                };
+            }
+
+            return {};
+
+        } catch (error) {
+
+            console.log(error);
+
+            return {
+                error: error.message
+            };
         }
     }
 }
