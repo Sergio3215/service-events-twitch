@@ -60,7 +60,11 @@ export class Tw_Client {
             const broadcaster_id = broadcasterData.data[0].id;
             // console.log(broadcaster_id);
 
-            const response = await fetch(`https://api.twitch.tv/helix/clips?broadcaster_id=${broadcaster_id}&first=1`, {
+            let date = new Date();
+            let beforeTime = new Date(`${date.getFullYear() - 1}-${date.getMonth() + 1}-${date.getDate()}`).toISOString();
+
+
+            const response = await fetch(`https://api.twitch.tv/helix/clips?broadcaster_id=${broadcaster_id}&first=1&started_at=${beforeTime}&ended_at=${(new Date()).toISOString()}`, {
                 method: 'GET',
                 headers: {
                     'Client-ID': clientId || "",
